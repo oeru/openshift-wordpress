@@ -33,6 +33,3 @@ else
     echo "Database found, skipping import."
 fi
 
-# Secure some settings
-chmod -v 0440 $OPENSHIFT_REPO_DIR/php/sites/default/settings.php
-chmod -v 0440 $OPENSHIFT_REPO_DIR/php/sites/default/default.settings.php
