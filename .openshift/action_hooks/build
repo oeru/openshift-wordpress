@@ -21,7 +21,9 @@ then
     echo
     echo "Database schema not found, importing 'wordpressl.sql' schema."
     echo
-    /usr/bin/mysql -u "$OPENSHIFT_DB_USERNAME" --password="$OPENSHIFT_DB_PASSWORD" -h "$OPENSHIFT_DB_HOST" "$OPENSHIFT_APP_NAME" < "$OPENSHIFT_REPO_DIR/.openshift/action_hooks/wordpress.sql"
+    [OPENSHIFT_APP_DNS] => drupal-dbvs.rhcloud.com
+    cat "$OPENSHIFT_REPO_DIR/.openshift/action_hooks/wordpress.sql" |sed s/"wordpress-dbvs.rhcloud.com"/"$OPENSHIFT_APP_DNS"/g > "$OPENSHIFT_REPO_DIR/.openshift/action_hooks/wordpress2.sql"
+    /usr/bin/mysql -u "$OPENSHIFT_DB_USERNAME" --password="$OPENSHIFT_DB_PASSWORD" -h "$OPENSHIFT_DB_HOST" "$OPENSHIFT_APP_NAME" < "$OPENSHIFT_REPO_DIR/.openshift/action_hooks/wordpress2.sql"
     echo
     echo "done."
     echo "=================================================="
