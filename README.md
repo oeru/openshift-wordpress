@@ -1,11 +1,11 @@
 Wordpress on OpenShift Express
-============================
+==============================
 
 This git repository helps you get up and running quickly w/ a Wordpress installation
 on OpenShift Express.  The backend database is MySQL and the database name is the 
-same as your application name (using $_ENV['OPENSHIFT_APP_NAME']).  You can call
-your application by whatever name you want (the name of the database will always
-match the application).
+same as your application name (using $_ENV['OPENSHIFT_APP_NAME']).  You can name
+your application whatever you want.  However, the name of the database will always
+match the application so you might have to update .openshift/action_hooks/build.
 
 
 Running on OpenShift
@@ -21,7 +21,7 @@ Add MySQL support to your application
 
     rhc-ctl-app -a wordpress -e add-mysql-5.1
 
-Add this upstream wordpress repo
+Add this upstream Wordpress repo
 
     cd wordpress 
     git remote add upstream -m master git://github.com/openshift/wordpress-example.git
