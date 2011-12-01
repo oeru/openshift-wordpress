@@ -20,7 +20,7 @@ fi
 if ! /usr/bin/mysql -u "$OPENSHIFT_DB_USERNAME" --password="$OPENSHIFT_DB_PASSWORD" -h "$OPENSHIFT_DB_HOST" -e "select * from wp_commentmeta;" "$OPENSHIFT_APP_NAME" > /dev/null 2>&1
 then
     echo
-    echo "Database schema not found, importing 'wordpressl.sql' schema."
+    echo "Database schema not found, importing 'wordpress.sql' schema."
     echo
     cat "$OPENSHIFT_REPO_DIR/.openshift/action_hooks/wordpress.sql" |sed s/"wordpress-dbvs.rhcloud.com"/"$OPENSHIFT_APP_DNS"/g > "$OPENSHIFT_REPO_DIR/.openshift/action_hooks/wordpress2.sql"
     /usr/bin/mysql -u "$OPENSHIFT_DB_USERNAME" --password="$OPENSHIFT_DB_PASSWORD" -h "$OPENSHIFT_DB_HOST" "$OPENSHIFT_APP_NAME" < "$OPENSHIFT_REPO_DIR/.openshift/action_hooks/wordpress2.sql"
