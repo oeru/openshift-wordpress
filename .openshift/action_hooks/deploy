@@ -32,7 +32,7 @@ while [ $RETRY -gt 0 ] ; do
     fi
 
     sleep 1
-    RETRY=`expr $RETRY - 1`
+    RETRY=$(( $RETRY - 1 ))
 done
 
 if [ -z "$OPENSHIFT_DB_HOST" ]
