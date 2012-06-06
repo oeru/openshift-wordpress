@@ -42,14 +42,44 @@ define('DB_COLLATE', '');
  *
  * @since 2.6.0
  */
-define('AUTH_KEY',         ' w*lE&r=t-;!|rhdx5}vlF+b=+D>a)R:nTY1Kdrw[~1,xDQS]L&PA%uyZ2:w6#ec');
-define('SECURE_AUTH_KEY',  '}Sd%ePgS5R[KwDxdBt56(DM:0m1^4)-k6_p8}|C:[-ei:&qA)j!X`:7d-krLZM*5');
-define('LOGGED_IN_KEY',    '$l^J?o)!zhp6s[-x^ckF}|BjU4d+(g1as)n/Q^s+k|,ZZc@E^h%Rx@VTm|0|?]6R');
-define('NONCE_KEY',        '#f^JM8d^!sVsq]~|4flCZHdaTy.-I.f+1tc[!h?%-+]U}|_8qc K=k;]mXePl-4v');
-define('AUTH_SALT',        'I_wL2t!|mSw_z_ zyIY:q6{IHw:R1yTPAO^%!5,*bF5^VX`5aO4]D=mtu~6]d}K?');
-define('SECURE_AUTH_SALT', '&%j?6!d<3IR%L[@iz=^OH!oHRXs4W|D,VCD7w%TC.uUa`NpOH_XXpGtL$A]{+pv9');
-define('LOGGED_IN_SALT',   'N<mft[~OZp0&Sn#t(IK2px0{KloRcjvIJ1+]:,Ye]>tb*_aM8P&2-bU~_Z>L/n(k');
-define('NONCE_SALT',       'u E-DQw%[k7l8SX=fsAVT@|_U/~_CUZesq{v(=y2}#X&lTRL{uOVzw6b!]`frTQ|');
+
+if (file_exists($_ENV['OPENSHIFT_DATA_DIR'] . "/secrets.php")) {
+
+	require_once($_ENV['OPENSHIFT_DATA_DIR'] . "/secrets.php");
+
+} else {
+
+	$SecretSALT = "<?php \n";
+	$SecretSALT .= file_get_contents("https://api.wordpress.org/secret-key/1.1/salt");
+	$SecretSALT .= "?>";
+
+	file_put_contents($_ENV['OPENSHIFT_DATA_DIR'] . "/secrets.php", $SecretSALT);
+
+	if (file_exists($_ENV['OPENSHIFT_DATA_DIR'] . "/secrets.php")) {
+
+		require_once($_ENV['OPENSHIFT_DATA_DIR'] . "/secrets.php");
+
+	} else {
+
+		error_log("OPENSHIFT WARNING: Using default WordPress salts, please change manually in wp-config.php", 0);
+
+		/**
+
+			If you see the ^above^ error in rhc-tail-files then you need to change the keys below.
+
+		**/
+		define('AUTH_KEY',         ' w*lE&r=t-;!|rhdx5}vlF+b=+D>a)R:nTY1Kdrw[~1,xDQS]L&PA%uyZ2:w6#ec');
+		define('SECURE_AUTH_KEY',  '}Sd%ePgS5R[KwDxdBt56(DM:0m1^4)-k6_p8}|C:[-ei:&qA)j!X`:7d-krLZM*5');
+		define('LOGGED_IN_KEY',    '$l^J?o)!zhp6s[-x^ckF}|BjU4d+(g1as)n/Q^s+k|,ZZc@E^h%Rx@VTm|0|?]6R');
+		define('NONCE_KEY',        '#f^JM8d^!sVsq]~|4flCZHdaTy.-I.f+1tc[!h?%-+]U}|_8qc K=k;]mXePl-4v');
+		define('AUTH_SALT',        'I_wL2t!|mSw_z_ zyIY:q6{IHw:R1yTPAO^%!5,*bF5^VX`5aO4]D=mtu~6]d}K?');
+		define('SECURE_AUTH_SALT', '&%j?6!d<3IR%L[@iz=^OH!oHRXs4W|D,VCD7w%TC.uUa`NpOH_XXpGtL$A]{+pv9');
+		define('LOGGED_IN_SALT',   'N<mft[~OZp0&Sn#t(IK2px0{KloRcjvIJ1+]:,Ye]>tb*_aM8P&2-bU~_Z>L/n(k');
+		define('NONCE_SALT',       'u E-DQw%[k7l8SX=fsAVT@|_U/~_CUZesq{v(=y2}#X&lTRL{uOVzw6b!]`frTQ|');
+
+	}
+
+}
 
 /**#@-*/
 
