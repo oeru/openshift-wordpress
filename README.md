@@ -49,8 +49,25 @@ GIT_ROOT/.openshift/action_hooks/deploy:
     GIT_ROOT/.openshift/action_hooks/deploy to execute that script (make sure to
     back up your application + database w/ 'rhc app snapshot save' first :) )
 
-Wordpress Security:
-    If you're doing more than just 'playing' be sure to edit wp-config.php and modify
-    the Authentication Unique Keys and Salts.  You can use the Wordpress site auth
-    key generator @ https://api.wordpress.org/secret-key/1.1/salt to help.
+Security Considerations
+-----------------------
+This repository contains configuration files with security related variables.
 
+Since this is a shared repository, any applications derived from it will share those variables, thus reducing the security of your application.
+
+You should follow the directions below and push your updated files to OpenShift immediately.
+
+### Procedure
+
+The following table lists files and the procedure for securing.
+
+<table>
+  <tr>
+    <th>File</th>
+    <th>Directions</th>
+  </tr>
+  <tr>
+    <td>php/wp-config.php</td>
+    <th>http://codex.wordpress.org/Editing_wp-config.php#Security_Keys</th>
+  </tr>
+</table>
