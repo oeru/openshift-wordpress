@@ -61,7 +61,7 @@ $_my_token = null;
 if (getenv('OPENSHIFT_SECRET_TOKEN'))
   $_my_token = getenv('OPENSHIFT_SECRET_TOKEN');
 elseif (getenv('OPENSHIFT_APP_NAME') && getenv('OPENSHIFT_APP_UUID'))
-  $_my_token = sprintf("%s-%s",getenv('OPENSHIFT_APP_NAME'),getenv('OPENSHIFT_APP_UUID'));
+  $_my_token = hash('sha256',sprintf("%s-%s",getenv('OPENSHIFT_APP_NAME'),getenv('OPENSHIFT_APP_UUID')));
 
 // Only generate random values if on OpenShift
 // This is similar to wp-includes/pluggable.php#wp_generate_password
@@ -131,4 +131,4 @@ if ( !defined('ABSPATH') )
   define('ABSPATH', dirname(__FILE__) . '/');
 
 /** Sets up WordPress vars and included files. */
-#require_once(ABSPATH . 'wp-settings.php');
+require_once(ABSPATH . 'wp-settings.php');
