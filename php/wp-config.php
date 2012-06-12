@@ -42,14 +42,58 @@ define('DB_COLLATE', '');
  *
  * @since 2.6.0
  */
-define('AUTH_KEY',         ' w*lE&r=t-;!|rhdx5}vlF+b=+D>a)R:nTY1Kdrw[~1,xDQS]L&PA%uyZ2:w6#ec');
-define('SECURE_AUTH_KEY',  '}Sd%ePgS5R[KwDxdBt56(DM:0m1^4)-k6_p8}|C:[-ei:&qA)j!X`:7d-krLZM*5');
-define('LOGGED_IN_KEY',    '$l^J?o)!zhp6s[-x^ckF}|BjU4d+(g1as)n/Q^s+k|,ZZc@E^h%Rx@VTm|0|?]6R');
-define('NONCE_KEY',        '#f^JM8d^!sVsq]~|4flCZHdaTy.-I.f+1tc[!h?%-+]U}|_8qc K=k;]mXePl-4v');
-define('AUTH_SALT',        'I_wL2t!|mSw_z_ zyIY:q6{IHw:R1yTPAO^%!5,*bF5^VX`5aO4]D=mtu~6]d}K?');
-define('SECURE_AUTH_SALT', '&%j?6!d<3IR%L[@iz=^OH!oHRXs4W|D,VCD7w%TC.uUa`NpOH_XXpGtL$A]{+pv9');
-define('LOGGED_IN_SALT',   'N<mft[~OZp0&Sn#t(IK2px0{KloRcjvIJ1+]:,Ye]>tb*_aM8P&2-bU~_Z>L/n(k');
-define('NONCE_SALT',       'u E-DQw%[k7l8SX=fsAVT@|_U/~_CUZesq{v(=y2}#X&lTRL{uOVzw6b!]`frTQ|');
+
+// Set the default keys to use
+$_default_keys = array(
+  'AUTH_KEY'          => ' w*lE&r=t-;!|rhdx5}vlF+b=+D>a)R:nTY1Kdrw[~1,xDQS]L&PA%uyZ2:w6#ec',
+  'SECURE_AUTH_KEY'   => '}Sd%ePgS5R[KwDxdBt56(DM:0m1^4)-k6_p8}|C:[-ei:&qA)j!X`:7d-krLZM*5',
+  'LOGGED_IN_KEY'     => '$l^J?o)!zhp6s[-x^ckF}|BjU4d+(g1as)n/Q^s+k|,ZZc@E^h%Rx@VTm|0|?]6R',
+  'NONCE_KEY'         => '#f^JM8d^!sVsq]~|4flCZHdaTy.-I.f+1tc[!h?%-+]U}|_8qc K=k;]mXePl-4v',
+  'AUTH_SALT'         => 'I_wL2t!|mSw_z_ zyIY:q6{IHw:R1yTPAO^%!5,*bF5^VX`5aO4]D=mtu~6]d}K?',
+  'SECURE_AUTH_SALT'  => '&%j?6!d<3IR%L[@iz=^OH!oHRXs4W|D,VCD7w%TC.uUa`NpOH_XXpGtL$A]{+pv9',
+  'LOGGED_IN_SALT'    => 'N<mft[~OZp0&Sn#t(IK2px0{KloRcjvIJ1+]:,Ye]>tb*_aM8P&2-bU~_Z>L/n(k',
+  'NONCE_SALT'        => 'u E-DQw%[k7l8SX=fsAVT@|_U/~_CUZesq{v(=y2}#X&lTRL{uOVzw6b!]`frTQ|'
+);
+
+// Set the token to use to seed the RNG, if we're on OpenShift
+$_my_token = null;
+
+if (getenv('OPENSHIFT_SECRET_TOKEN'))
+  $_my_token = getenv('OPENSHIFT_SECRET_TOKEN');
+elseif (getenv('OPENSHIFT_APP_NAME') && getenv('OPENSHIFT_APP_UUID'))
+  $_my_token = hash('sha256',sprintf("%s-%s",getenv('OPENSHIFT_APP_NAME'),getenv('OPENSHIFT_APP_UUID')));
+
+// Only generate random values if on OpenShift
+// This is similar to wp-includes/pluggable.php#wp_generate_password
+//    Couldn't use that because we weren't able to override the random seed
+if ($_my_token){
+  // Character set to use
+	$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  $chars .= '!@#$%^&*()';
+  $chars .= '-_ []{}<>~`+=,.;:/?|';
+
+  // Loop over each default_key and set the new value
+  foreach ($_default_keys as $key => $value) {
+    // Create hash out of token and this key's name
+    $_sha = hash('sha256',"$_my_token-$key");
+    // Convert the hash to an int to seed the RNG
+    srand(hexdec(substr($_sha,0,8)));
+    // Create a random string the same length as the default
+    $val = '';
+    for($i = 1; $i <= strlen($value); $i++){
+      $val .= substr( $chars, rand(0,strlen($chars))-1, 1);
+    }
+    // Reset the RNG
+    srand();
+    // Set the value
+    define($key,$val);#apply_filters('random_password',$val));
+  }
+} else {
+  error_log("OPENSHIFT WARNING: Using default WordPress salts, please change manually in wp-config.php", 0);
+  foreach ($_default_keys as $key => $value) {
+    define($key,$value);
+  }
+}
 
 /**#@-*/
 
@@ -84,7 +128,7 @@ define('WP_DEBUG', false);
 
 /** Absolute path to the WordPress directory. */
 if ( !defined('ABSPATH') )
-	define('ABSPATH', dirname(__FILE__) . '/');
+  define('ABSPATH', dirname(__FILE__) . '/');
 
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
