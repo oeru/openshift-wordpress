@@ -32,12 +32,19 @@ Then push the repo upstream
 
     git push
 
-That's it, you can now checkout your application at (default admin account is admin/OpenShiftAdmin):
+That's it, you can now checkout your application at:
 
     http://wordpress-$yournamespace.rhcloud.com
+    
+Default Credentials
+-------------------
+<table>
+<tr><td>Default Admin Username</td><td>admin</td></tr>
+<tr><td>Default Admin Password</td><td>OpenShiftAdmin</td></tr>
+</table>
 
-
-NOTES:
+Notes
+=====
 
 GIT_ROOT/.openshift/action_hooks/deploy:
     This script is executed with every 'git push'.  Feel free to modify this script
