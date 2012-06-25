@@ -43,6 +43,9 @@ define('DB_COLLATE', '');
  * @since 2.6.0
  */
 
+// This is where we define the OpenShift specific secure variable functions
+require_once(ABSPATH . '/wp-includes/openshift.inc');
+
 // Set the default keys to use
 $_default_keys = array(
   'AUTH_KEY'          => ' w*lE&r=t-;!|rhdx5}vlF+b=+D>a)R:nTY1Kdrw[~1,xDQS]L&PA%uyZ2:w6#ec',
@@ -55,44 +58,35 @@ $_default_keys = array(
   'NONCE_SALT'        => 'u E-DQw%[k7l8SX=fsAVT@|_U/~_CUZesq{v(=y2}#X&lTRL{uOVzw6b!]`frTQ|'
 );
 
-// Set the token to use to seed the RNG, if we're on OpenShift
-$_my_token = null;
+// This function gets called by openshift_secure and passes an array
+function make_secure_key($args) {
+  $hash = $args['hash'];
+  $key  = $args['variable'];
+  $original = $args['original'];
 
-if (getenv('OPENSHIFT_SECRET_TOKEN'))
-  $_my_token = getenv('OPENSHIFT_SECRET_TOKEN');
-elseif (getenv('OPENSHIFT_APP_NAME') && getenv('OPENSHIFT_APP_UUID'))
-  $_my_token = hash('sha256',sprintf("%s-%s",getenv('OPENSHIFT_APP_NAME'),getenv('OPENSHIFT_APP_UUID')));
-
-// Only generate random values if on OpenShift
-// This is similar to wp-includes/pluggable.php#wp_generate_password
-//    Couldn't use that because we weren't able to override the random seed
-if ($_my_token){
-  // Character set to use
 	$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   $chars .= '!@#$%^&*()';
   $chars .= '-_ []{}<>~`+=,.;:/?|';
 
-  // Loop over each default_key and set the new value
-  foreach ($_default_keys as $key => $value) {
-    // Create hash out of token and this key's name
-    $_sha = hash('sha256',"$_my_token-$key");
-    // Convert the hash to an int to seed the RNG
-    srand(hexdec(substr($_sha,0,8)));
-    // Create a random string the same length as the default
-    $val = '';
-    for($i = 1; $i <= strlen($value); $i++){
-      $val .= substr( $chars, rand(0,strlen($chars))-1, 1);
-    }
-    // Reset the RNG
-    srand();
-    // Set the value
-    define($key,$val);#apply_filters('random_password',$val));
+  // Convert the hash to an int to seed the RNG
+  srand(hexdec(substr($hash,0,8)));
+  // Create a random string the same length as the default
+  $val = '';
+  for($i = 1; $i <= strlen($original); $i++){
+    $val .= substr( $chars, rand(0,strlen($chars))-1, 1);
   }
-} else {
-  error_log("OPENSHIFT WARNING: Using default WordPress salts, please change manually in wp-config.php", 0);
-  foreach ($_default_keys as $key => $value) {
-    define($key,$value);
-  }
+  // Reset the RNG
+  srand();
+  // Set the value
+  return $val;
+}
+
+// Generate OpenShift secure keys (or return defaults if not on OpenShift)
+$array = openshift_secure($_default_keys,'make_secure_key');
+
+// Loop through returned values and define them
+foreach ($array as $key => $value) {
+  define($key,$value);
 }
 
 /**#@-*/
