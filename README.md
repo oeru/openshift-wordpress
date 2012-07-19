@@ -27,34 +27,57 @@ Add this upstream Wordpress repo
     git remote add upstream -m master git://github.com/openshift/wordpress-example.git
     git pull -s recursive -X theirs upstream master
     # note that the git pull above can be used later to pull updates to Wordpress
-    
-Then push the repo upstream
+
+
+Optional step to set the WordPress administrator's email
+--------------------------------------------------------
+This is optional but it is highly recommended you set the WordPress
+adminstrator's email address. This can be done by editing the
+`.openshift/action_hooks/deploy` file and setting the WP_ADMIN_EMAIL variable
+to the WordPress administrator's email (or your email).
+
+    sed -i "s/^WP_ADMIN_EMAIL=.*$/WP_ADMIN_EMAIL=\"me@example.org\"/"  \
+            .openshift/action_hooks/deploy
+    git commit . -m 'set wordpress admin email'
+
+
+And finally, push the changes to your application
 
     git push
+
+Be sure to make a note of the default admin password
+----------------------------------------------------
 
 That's it, you can now checkout your application at:
 
     http://wordpress-$yournamespace.rhcloud.com
     
-Default Credentials
--------------------
-<table>
-<tr><td>Default Admin Username</td><td>admin</td></tr>
-<tr><td>Default Admin Password</td><td>OpenShiftAdmin</td></tr>
-</table>
 
 Notes
 =====
 
 GIT_ROOT/.openshift/action_hooks/deploy:
-    This script is executed with every 'git push'.  Feel free to modify this script
-    to learn how to use it to your advantage.  By default, this script will create
-    the database tables that this example uses.
+    This script is executed with every 'git push'. Feel free to modify this
+    script to learn how to use it to your advantage. By default, this script
+    will create the database tables that this example uses. You can also set
+    the initial/default WordPress admin email via the WP_ADMIN_EMAIL variable.
 
     If you need to modify the schema, you could create a file 
     GIT_ROOT/.openshift/action_hooks/alter.sql and then use
     GIT_ROOT/.openshift/action_hooks/deploy to execute that script (make sure to
     back up your application + database w/ 'rhc app snapshot save' first :) )
+
+
+If you wish to reset the WordPress administrator's email and/or password,
+ssh into your application `ssh $appguid@wordpress-$yournamespace.rhcloud.com`
+and update the wp_users table using mysql.
+
+    sh> mysql wordpress
+    mysql> update wp_users set user_email='me@example.org'
+           where user_login = "admin";
+    mysql> update wp_users set user_pass=MD5('<insert-your-password-here>')
+           where user_login = "admin";
+
 
 Security Considerations
 -----------------------
