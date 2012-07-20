@@ -6,6 +6,17 @@
 
 set -e
 
+# Replace this with the WordPress administrator's email (or your email).
+WP_ADMIN_EMAIL="admin@nobody.com"
+
+
+function generate_random_password() {
+   # Generate a random password without 'em confusing Os and 0s.
+   vchars="a-np-zA-NP-Z1-9-_"
+   head -n 1024 /dev/urandom | tr -dc "$vchars" | fold -w 16 |  head -n 1
+}
+
+
 if [ -z "$OPENSHIFT_DB_HOST" ]
 then
     echo 1>&2
@@ -41,19 +52,31 @@ then
 fi
 
 # Confirm database exists, if not create it
-if ! /usr/bin/mysql -u "$OPENSHIFT_DB_USERNAME" --password="$OPENSHIFT_DB_PASSWORD" -h "$OPENSHIFT_DB_HOST" -e "select * from wp_commentmeta;" "$OPENSHIFT_APP_NAME" > /dev/null 2>&1
-then
+if ! /usr/bin/mysql -h "$OPENSHIFT_DB_HOST" -u "$OPENSHIFT_DB_USERNAME"      \
+      --password="$OPENSHIFT_DB_PASSWORD" -e "select * from wp_commentmeta;" \
+      "$OPENSHIFT_APP_NAME" > /dev/null 2>&1; then
     echo
     echo "Database schema not found, importing 'wordpress.sql' schema."
     echo
-    cat "$OPENSHIFT_REPO_DIR/.openshift/action_hooks/wordpress.sql" |sed s/"wordpress-dbvs.rhcloud.com"/"$OPENSHIFT_APP_DNS"/g > "$OPENSHIFT_REPO_DIR/.openshift/action_hooks/wordpress2.sql"
-    /usr/bin/mysql -u "$OPENSHIFT_DB_USERNAME" --password="$OPENSHIFT_DB_PASSWORD" -h "$OPENSHIFT_DB_HOST" "$OPENSHIFT_APP_NAME" < "$OPENSHIFT_REPO_DIR/.openshift/action_hooks/wordpress2.sql"
+
+    wp_admin_pass=$(generate_random_password)
+    substitutes="s#wordpress-dbvs.rhcloud.com#$OPENSHIFT_APP_DNS#g;  \
+                 s#%WP_ADMIN_PASSWORD%#$wp_admin_pass#g;"
+    if [ "$WP_ADMIN_EMAIL" != "admin@nobody.com" ]; then
+        substitutes="$substitutes s#admin@nobody.com#$WP_ADMIN_EMAIL#g;"
+    fi
+
+    cat "$OPENSHIFT_REPO_DIR/.openshift/action_hooks/wordpress.sql"  |      \
+        sed "$substitutes"                                           |      \
+        /usr/bin/mysql -h "$OPENSHIFT_DB_HOST" -u "$OPENSHIFT_DB_USERNAME"  \
+              --password="$OPENSHIFT_DB_PASSWORD" "$OPENSHIFT_APP_NAME"
+
     echo
     echo "done."
     echo "=================================================="
-    echo "  Wordpress-Admin login: admin"
-    echo "  Wordpress-Admin password: OpenShiftAdmin"
-    echo "  Don't forget to change your Wordpress admin password!"
+    echo "     Wordpress-Admin login: admin"
+    echo "  Wordpress-Admin password: $wp_admin_pass"
+    echo "     Wordpress-Admin email: $WP_ADMIN_EMAIL"
     echo "=================================================="
 else
     echo "Database found, skipping import."

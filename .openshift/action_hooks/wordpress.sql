@@ -350,7 +350,7 @@ CREATE TABLE `wp_users` (
 
 LOCK TABLES `wp_users` WRITE;
 /*!40000 ALTER TABLE `wp_users` DISABLE KEYS */;
-INSERT INTO `wp_users` VALUES (1,'admin','$P$BWTV2.IPuXJaPchoreKub7BwyIZaG11','admin','admin@nobody.com','','2011-08-26 03:07:11','',0,'admin');
+INSERT INTO `wp_users` VALUES (1,'admin',MD5('%WP_ADMIN_PASSWORD%'),'admin','admin@nobody.com','','2011-08-26 03:07:11','',0,'admin');
 /*!40000 ALTER TABLE `wp_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
