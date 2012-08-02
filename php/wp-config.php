@@ -25,7 +25,7 @@ define('DB_USER', $_ENV['OPENSHIFT_DB_USERNAME']);
 define('DB_PASSWORD', $_ENV['OPENSHIFT_DB_PASSWORD']);
 
 /** MySQL hostname */
-define('DB_HOST', $_ENV['OPENSHIFT_DB_HOST']);
+define('DB_HOST', $_ENV['OPENSHIFT_DB_HOST'] . ':' . $_ENV['OPENSHIFT_DB_PORT']);
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
