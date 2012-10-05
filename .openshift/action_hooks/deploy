@@ -6,7 +6,7 @@
 
 set -e
 
-if [ -z "$OPENSHIFT_DB_HOST" ]
+if [ -z "$OPENSHIFT_MYSQL_DB_HOST" ]
 then
     echo 1>&2
     echo "Could not find mysql database.  Please run:" 1>&2
@@ -24,9 +24,9 @@ while [ $RETRY -gt 0 ] ; do
     done
 
     #check for db
-    if [ -n "$OPENSHIFT_DB_HOST" ]
+    if [ -n "$OPENSHIFT_MYSQL_DB_HOST" ]
     then
-        echo "Database server found at $OPENSHIFT_DB_HOST. initializing..."
+        echo "Database server found at $OPENSHIFT_MYSQL_DB_HOST. initializing..."
         sleep 5
         break
     fi
@@ -35,19 +35,19 @@ while [ $RETRY -gt 0 ] ; do
     RETRY=$(( $RETRY - 1 ))
 done
 
-if [ -z "$OPENSHIFT_DB_HOST" ]
+if [ -z "$OPENSHIFT_MYSQL_DB_HOST" ]
 then
     exit 5
 fi
 
 # Confirm database exists, if not create it
-if ! /usr/bin/mysql -u "$OPENSHIFT_DB_USERNAME" --password="$OPENSHIFT_DB_PASSWORD" -h "$OPENSHIFT_DB_HOST" -P "$OPENSHIFT_DB_PORT" -e "select * from wp_commentmeta;" "$OPENSHIFT_APP_NAME" > /dev/null 2>&1
+if ! /usr/bin/mysql -u "$OPENSHIFT_MYSQL_DB_USERNAME" --password="$OPENSHIFT_MYSQL_DB_PASSWORD" -h "$OPENSHIFT_MYSQL_DB_HOST" -P "$OPENSHIFT_MYSQL_DB_PORT" -e "select * from wp_commentmeta;" "$OPENSHIFT_APP_NAME" > /dev/null 2>&1
 then
     echo
     echo "Database schema not found, importing 'wordpress.sql' schema."
     echo
     cat "$OPENSHIFT_REPO_DIR/.openshift/action_hooks/wordpress.sql" |sed s/"wordpress-dbvs.rhcloud.com"/"$OPENSHIFT_APP_DNS"/g > "$OPENSHIFT_REPO_DIR/.openshift/action_hooks/wordpress2.sql"
-    /usr/bin/mysql -u "$OPENSHIFT_DB_USERNAME" --password="$OPENSHIFT_DB_PASSWORD" -h "$OPENSHIFT_DB_HOST" -P "$OPENSHIFT_DB_PORT" "$OPENSHIFT_APP_NAME" < "$OPENSHIFT_REPO_DIR/.openshift/action_hooks/wordpress2.sql"
+    /usr/bin/mysql -u "$OPENSHIFT_MYSQL_DB_USERNAME" --password="$OPENSHIFT_MYSQL_DB_PASSWORD" -h "$OPENSHIFT_MYSQL_DB_HOST" -P "$OPENSHIFT_MYSQL_DB_PORT" "$OPENSHIFT_APP_NAME" < "$OPENSHIFT_REPO_DIR/.openshift/action_hooks/wordpress2.sql"
     echo
     echo "done."
     echo "=================================================="
@@ -58,6 +58,3 @@ then
 else
     echo "Database found, skipping import."
 fi
-
-$OPENSHIFT_GEAR_CTL_SCRIPT stop
-$OPENSHIFT_GEAR_CTL_SCRIPT start
