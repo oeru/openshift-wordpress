@@ -8,3 +8,10 @@ if [ ! -d $OPENSHIFT_DATA_DIR/uploads ]; then
 fi
  
 ln -sf $OPENSHIFT_DATA_DIR/uploads $OPENSHIFT_REPO_DIR/php/wp-content/
+
+# Add multisite upload dir
+if [ ! -d $OPENSHIFT_DATA_DIR/blogs.dir ]; then
+    mkdir $OPENSHIFT_DATA_DIR/blogs.dir
+fi
+
+ln -sf $OPENSHIFT_DATA_DIR/blogs.dir $OPENSHIFT_REPO_DIR/php/wp-content/
