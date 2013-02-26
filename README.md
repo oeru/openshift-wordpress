@@ -11,37 +11,22 @@ match the application so you might have to update .openshift/action_hooks/build.
 Running on OpenShift
 ----------------------------
 
-Create an account at http://openshift.redhat.com/
+Create an account at http://openshift.redhat.com/ and install the client tools (run 'rhc setup' first)
 
 Create a php-5.3 application (you can call your application whatever you want)
 
-    rhc app create -a wordpress -t php-5.3
-
-Add MySQL support to your application
-
-    rhc cartridge add -a wordpress -c mysql-5.1
-
-Add this upstream Wordpress repo
-
-    cd wordpress 
-    git remote add upstream -m master git://github.com/openshift/wordpress-example.git
-    git pull -s recursive -X theirs upstream master
-    # note that the git pull above can be used later to pull updates to Wordpress
-    
-Then push the repo upstream
-
-    git push
+    rhc app create wordpress php-5 mysql-5 --from-code=https://github.com/openshift/wordpress-example
 
 That's it, you can now checkout your application at:
 
     http://wordpress-$yournamespace.rhcloud.com
     
-Default Credentials
--------------------
-<table>
-<tr><td>Default Admin Username</td><td>admin</td></tr>
-<tr><td>Default Admin Password</td><td>OpenShiftAdmin</td></tr>
-</table>
+You'll be prompted to set an admin password and name your WordPress site the first time you visit this 
+page.  
+
+Note: When you upload plugins and themes, they'll get put into your OpenShift data directory
+on the gear ($OPENSHIFT_DATA_DIR).  If you'd like to check these into source control, download the 
+plugins and themes directories and then check them directly into php/wp-content/themes, php/wp-content/plugins.
 
 Notes
 =====
