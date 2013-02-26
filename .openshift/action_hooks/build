@@ -3,8 +3,28 @@
 # available.  Otherwise it will execute while your application is stopped
 # before the deploy step.  This script gets executed directly, so it
 # could be python, php, ruby, etc.
+
 if [ ! -d $OPENSHIFT_DATA_DIR/uploads ]; then
     mkdir $OPENSHIFT_DATA_DIR/uploads
 fi
- 
+
+if [ ! -d $OPENSHIFT_DATA_DIR/plugins ]; then
+    mkdir $OPENSHIFT_DATA_DIR/plugins
+fi
+
+if [ ! -d $OPENSHIFT_DATA_DIR/themes ]; then
+    mkdir $OPENSHIFT_DATA_DIR/themes
+fi
+
+# Add multisite upload dir
+if [ ! -d $OPENSHIFT_DATA_DIR/blogs.dir ]; then
+    mkdir $OPENSHIFT_DATA_DIR/blogs.dir
+fi
+
+ln -sf $OPENSHIFT_DATA_DIR/blogs.dir $OPENSHIFT_REPO_DIR/php/wp-content/
+ln -sf $OPENSHIFT_DATA_DIR/plugins $OPENSHIFT_REPO_DIR/php/wp-content/
+ln -sf $OPENSHIFT_DATA_DIR/themes $OPENSHIFT_REPO_DIR/php/wp-content/
 ln -sf $OPENSHIFT_DATA_DIR/uploads $OPENSHIFT_REPO_DIR/php/wp-content/
+
+echo "<?php ?>" > $OPENSHIFT_DATA_DIR/plugins
+echo "<?php ?>" > $OPENSHIFT_DATA_DIR/themes
