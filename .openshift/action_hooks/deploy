@@ -44,16 +44,7 @@ fi
 if ! /usr/bin/mysql -u "$OPENSHIFT_MYSQL_DB_USERNAME" --password="$OPENSHIFT_MYSQL_DB_PASSWORD" -h "$OPENSHIFT_MYSQL_DB_HOST" -P "$OPENSHIFT_MYSQL_DB_PORT" -e "select * from wp_commentmeta;" "$OPENSHIFT_APP_NAME" > /dev/null 2>&1
 then
     echo
-    echo "Database schema not found, importing 'wordpress.sql' schema."
-    echo
-    /usr/bin/mysql -u "$OPENSHIFT_MYSQL_DB_USERNAME" --password="$OPENSHIFT_MYSQL_DB_PASSWORD" -h "$OPENSHIFT_MYSQL_DB_HOST" -P "$OPENSHIFT_MYSQL_DB_PORT" "$OPENSHIFT_APP_NAME" < "$OPENSHIFT_REPO_DIR/.openshift/action_hooks/wordpress.sql"
-    echo
-    echo "done."
-    echo "=================================================="
-    echo "  Wordpress-Admin login: admin"
-    echo "  Wordpress-Admin password: OpenShiftAdmin"
-    echo "  Don't forget to change your Wordpress admin password!"
-    echo "=================================================="
+    echo "Database schema not yet added, WordPress is ready for install by visiting the site."
 else
-    echo "Database found, skipping import."
+    echo "Database already configured."
 fi
