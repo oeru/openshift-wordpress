@@ -43,23 +43,6 @@ GIT_ROOT/.openshift/action_hooks/deploy:
 
 Security Considerations
 -----------------------
-This repository contains configuration files with security related variables.
-
-Since this is a shared repository, any applications derived from it will share those variables, thus reducing the security of your application.
-
-You should follow the directions below and push your updated files to OpenShift immediately.
-
-### Procedure
-
-The following table lists files and the procedure for securing.
-
-<table>
-  <tr>
-    <th>File</th>
-    <th>Directions</th>
-  </tr>
-  <tr>
-    <td>php/wp-config.php</td>
-    <th>http://codex.wordpress.org/Editing_wp-config.php#Security_Keys</th>
-  </tr>
-</table>
+Consule the WordPress documentation for best practices regarding securing your wordpress installation.  OpenShift 
+automatically generates unique secret keys for your deployment into wp-config.php, but you may feel more
+comfortable following the WordPress documentation directly.
