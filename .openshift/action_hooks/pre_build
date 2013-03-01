@@ -3,5 +3,3 @@
 # available.  Otherwise it will execute while your application is stopped
 # before the build step.  This script gets executed directly, so it
 # could be python, php, ruby, etc.
-
-echo "WordPress application credentials\n\tuser: admin\n\tpassword: OpenShiftAdmin\n" > ${OPENSHIFT_DATA_DIR}/CREDENTIALS
