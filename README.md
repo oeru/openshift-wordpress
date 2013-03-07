@@ -43,6 +43,6 @@ GIT_ROOT/.openshift/action_hooks/deploy:
 
 Security Considerations
 -----------------------
-Consule the WordPress documentation for best practices regarding securing your wordpress installation.  OpenShift 
+Consult the WordPress documentation for best practices regarding securing your wordpress installation.  OpenShift 
 automatically generates unique secret keys for your deployment into wp-config.php, but you may feel more
 comfortable following the WordPress documentation directly.
