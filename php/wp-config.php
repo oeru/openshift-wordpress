@@ -118,6 +118,11 @@ define('WPLANG', '');
  */
 define('WP_DEBUG', false);
 
+/**
+ * We prefer to be secure by default
+ */
+define('FORCE_SSL_ADMIN', true);
+
 /* That's all, stop editing! Happy blogging. */
 
 /** Absolute path to the WordPress directory. */
