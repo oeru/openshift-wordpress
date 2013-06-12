@@ -129,5 +129,9 @@ define('FORCE_SSL_ADMIN', true);
 if ( !defined('ABSPATH') )
   define('ABSPATH', dirname(__FILE__) . '/');
 
+/** Tell WordPress where the plugins directory really is */
+if ( !defined('WP_PLUGIN_DIR') && is_link(ABSPATH . '/wp-content/plugins') )
+  define('WP_PLUGIN_DIR', realpath(ABSPATH . '/wp-content/plugins'));
+
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
