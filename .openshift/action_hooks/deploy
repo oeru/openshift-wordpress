@@ -1,8 +1,11 @@
 #!/bin/bash
+
 # This deploy hook gets executed after dependencies are resolved and the
 # build hook has been run but before the application has been started back
 # up again.  This script gets executed directly, so it could be python, php,
 # ruby, etc.
+
+ln -sf ${OPENSHIFT_DATA_DIR}current ${OPENSHIFT_REPO_DIR}php
 
 if [ ! -d $OPENSHIFT_DATA_DIR/uploads ]; then
     mkdir $OPENSHIFT_DATA_DIR/uploads
@@ -21,10 +24,10 @@ if [ ! -d $OPENSHIFT_DATA_DIR/blogs.dir ]; then
     mkdir $OPENSHIFT_DATA_DIR/blogs.dir
 fi
 
-ln -sf $OPENSHIFT_DATA_DIR/blogs.dir $OPENSHIFT_REPO_DIR/php/wp-content/
-ln -sf $OPENSHIFT_DATA_DIR/plugins $OPENSHIFT_REPO_DIR/php/wp-content/
-ln -sf $OPENSHIFT_DATA_DIR/themes $OPENSHIFT_REPO_DIR/php/wp-content/
-ln -sf $OPENSHIFT_DATA_DIR/uploads $OPENSHIFT_REPO_DIR/php/wp-content/
+ln -sf ${OPENSHIFT_DATA_DIR}blogs.dir ${OPENSHIFT_REPO_DIR}php/wp-content/
+ln -sf ${OPENSHIFT_DATA_DIR}plugins   ${OPENSHIFT_REPO_DIR}php/wp-content/
+ln -sf ${OPENSHIFT_DATA_DIR}themes    ${OPENSHIFT_REPO_DIR}php/wp-content/
+ln -sf ${OPENSHIFT_DATA_DIR}uploads   ${OPENSHIFT_REPO_DIR}php/wp-content/
 
 set -e
 

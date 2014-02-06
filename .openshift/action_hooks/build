@@ -1,6 +1,17 @@
 #!/bin/bash
-# This is a simple build script and will be executed on your CI system if 
-# available.  Otherwise it will execute while your application is stopped
-# before the deploy step.  This script gets executed directly, so it
-# could be python, php, ruby, etc.
 
+# To update the version shipped in this quickstart, bump this variable:
+#
+install_version="3.8.1"
+
+
+# Download and install Wordpress
+
+install_dir=${OPENSHIFT_DATA_DIR}${install_version}
+mkdir -p ${install_dir}
+
+pushd ${install_dir} >/dev/null
+curl -s http://wordpress.org/wordpress-${install_version}.tar.gz | tar --strip-components=1 -xzf -
+popd >/dev/null
+
+ln -sf ${install_dir} ${OPENSHIFT_DATA_DIR}current
