@@ -11,13 +11,14 @@ if [ ! -d $OPENSHIFT_DATA_DIR/uploads ]; then
     mkdir $OPENSHIFT_DATA_DIR/uploads
 fi
 
-if [ ! -d $OPENSHIFT_DATA_DIR/plugins ]; then
-    cp -r $OPENSHIFT_REPO_DIR/.openshift/plugins $OPENSHIFT_DATA_DIR/plugins
-fi
+# Copy themes and plugins from users GIT repo
+#
 
-if [ ! -d $OPENSHIFT_DATA_DIR/themes ]; then
-    cp -r $OPENSHIFT_REPO_DIR/.openshift/themes $OPENSHIFT_DATA_DIR/themes
-fi
+echo "Copying WordPress plugins from .openshift/plugins"
+cp -rf $OPENSHIFT_REPO_DIR/.openshift/plugins/* $OPENSHIFT_DATA_DIR/plugins/ 2>/dev/null
+
+echo "Copying WordPress themes from .openshift/themes"
+cp -rf $OPENSHIFT_REPO_DIR/.openshift/themes/* $OPENSHIFT_DATA_DIR/themes/ 2>/dev/null
 
 # Add multisite upload dir
 if [ ! -d $OPENSHIFT_DATA_DIR/blogs.dir ]; then
