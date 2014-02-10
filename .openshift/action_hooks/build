@@ -8,6 +8,9 @@ install_version="3.8.1"
 
 install_dir=${OPENSHIFT_DATA_DIR}${install_version}
 
+# Used in this script only
+current_version_dir=${OPENSHIFT_DATA_DIR}current
+
 # The Wordpress is already installed, nothing else to do...
 [ -d "${install_dir}" ] && exit 0
 
@@ -33,13 +36,16 @@ rm -rf wordpress-${install_version}.tar.gz
 
 popd >/dev/null
 
-ln -sf ${install_dir} ${OPENSHIFT_DATA_DIR}current
+ln -sf ${install_dir} ${current_version_dir}
+
+mv ${current_version_dir}/wp-content/plugins ${OPENSHIFT_DATA_DIR}/plugins
+mv ${current_version_dir}/wp-content/themes ${OPENSHIFT_DATA_DIR}/themes
 
 # Make it easier for users to pass the Wordpress initial setup
 # by prefilling the default values to match with OpenShift environment
 # variables.
 #
-sed -i "s/value=\"localhost\"/value=\"${OPENSHIFT_MYSQL_DB_HOST}\"/" ${OPENSHIFT_DATA_DIR}current/wp-admin/setup-config.php
-sed -i "s/value=\"wordpress\"/value=\"${OPENSHIFT_APP_NAME}\"/" ${OPENSHIFT_DATA_DIR}current/wp-admin/setup-config.php
-sed -i "s/'username'/'${OPENSHIFT_MYSQL_DB_USERNAME}'/" ${OPENSHIFT_DATA_DIR}current/wp-admin/setup-config.php
-sed -i "s/'password'/'${OPENSHIFT_MYSQL_DB_PASSWORD}'/" ${OPENSHIFT_DATA_DIR}current/wp-admin/setup-config.php
+sed -i "s/value=\"localhost\"/value=\"${OPENSHIFT_MYSQL_DB_HOST}\"/" ${current_version_dir}/wp-admin/setup-config.php
+sed -i "s/value=\"wordpress\"/value=\"${OPENSHIFT_APP_NAME}\"/" ${current_version_dir}/wp-admin/setup-config.php
+sed -i "s/'username'/'${OPENSHIFT_MYSQL_DB_USERNAME}'/" ${current_version_dir}/wp-admin/setup-config.php
+sed -i "s/'password'/'${OPENSHIFT_MYSQL_DB_PASSWORD}'/" ${current_version_dir}/wp-admin/setup-config.php
