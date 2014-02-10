@@ -61,5 +61,3 @@ function openshift_secure($default_keys,$secure_function = null) {
   }
   return $array;
 }
-
-?>
