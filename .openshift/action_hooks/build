@@ -49,3 +49,7 @@ sed -i "s/value=\"localhost\"/value=\"${OPENSHIFT_MYSQL_DB_HOST}\"/" ${current_v
 sed -i "s/value=\"wordpress\"/value=\"${OPENSHIFT_APP_NAME}\"/" ${current_version_dir}/wp-admin/setup-config.php
 sed -i "s/'username'/'${OPENSHIFT_MYSQL_DB_USERNAME}'/" ${current_version_dir}/wp-admin/setup-config.php
 sed -i "s/'password'/'${OPENSHIFT_MYSQL_DB_PASSWORD}'/" ${current_version_dir}/wp-admin/setup-config.php
+
+# Copy the OpenShift wp-config.php file
+
+cp -f ${OPENSHIFT_REPO_DIR}.openshift/config/wp-config.php ${current_version_dir}/wp-config.php
