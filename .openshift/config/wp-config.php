@@ -44,7 +44,7 @@ define('DB_COLLATE', '');
  */
 
 // This is where we define the OpenShift specific secure variable functions
-require_once(ABSPATH . '../.openshift/openshift.inc');
+require_once(getenv('OPENSHIFT_REPO_DIR') . '.openshift/openshift.inc');
 
 // Set the default keys to use
 $_default_keys = array(
