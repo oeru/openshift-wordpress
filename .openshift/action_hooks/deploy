@@ -17,6 +17,9 @@ fi
 
 # Replace the php/ directory with provided clean Wordpress installation
 #
+if [ -d ${OPENSHIFT_REPO_DIR}php ]; then
+  rm -rf ${OPENSHIFT_REPO_DIR}php
+fi
 ln -sf ${dest_dir} ${OPENSHIFT_REPO_DIR}php
 
 if [ ! -d ${OPENSHIFT_DATA_DIR}uploads ]; then
