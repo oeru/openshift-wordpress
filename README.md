@@ -15,7 +15,7 @@ Create an account at http://openshift.redhat.com/ and install the client tools (
 
 Create a php-5.3 application (you can call your application whatever you want)
 
-    rhc app create wordpress php-5 mysql-5 --from-code=https://github.com/openshift/wordpress-example
+    rhc app create wordpress php-5.3 mysql-5.1 --from-code=https://github.com/openshift/wordpress-example
 
 That's it, you can now checkout your application at:
 
