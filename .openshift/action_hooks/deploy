@@ -5,22 +5,47 @@
 # up again.  This script gets executed directly, so it could be python, php,
 # ruby, etc.
 
-ln -sf ${OPENSHIFT_DATA_DIR}current ${OPENSHIFT_REPO_DIR}php
+dest_dir=${OPENSHIFT_DATA_DIR}current
 
-if [ ! -d $OPENSHIFT_DATA_DIR/uploads ]; then
-    mkdir $OPENSHIFT_DATA_DIR/uploads
+current_version=$(cat ${OPENSHIFT_BUILD_DEPENDENCIES_DIR}.current_version)
+install_dir=${OPENSHIFT_BUILD_DEPENDENCIES_DIR}${current_version}
+
+if [ ! -d "${dest_dir}" ]; then
+  mkdir -p $dest_dir
+  cp -rf ${install_dir}/* ${dest_dir}/
 fi
 
-# Copy themes and plugins from users GIT repo
+# Replace the php/ directory with provided clean Wordpress installation
 #
+ln -sf ${dest_dir} ${OPENSHIFT_REPO_DIR}php
 
+if [ ! -d ${OPENSHIFT_DATA_DIR}uploads ]; then
+    mkdir ${OPENSHIFT_DATA_DIR}uploads
+fi
+
+
+# If this is initial installation, copy the default themes and plugins
+# from official Wordpress installation
+#
+if [ ! -d ${OPENSHIFT_DATA_DIR}plugins ]; then
+  mv ${dest_dir}/wp-content/plugins ${OPENSHIFT_DATA_DIR}plugins
+fi
+
+if [ ! -h ${OPENSHIFT_DATA_DIR}themes ]; then
+  mv ${dest_dir}/wp-content/themes ${OPENSHIFT_DATA_DIR}themes
+fi
+
+# Users can place their own plugins and themes into .openshift/ directory
+# inside their GIT repository.
+#
 echo "Copying WordPress plugins from .openshift/plugins"
-cp -rf $OPENSHIFT_REPO_DIR/.openshift/plugins/* $OPENSHIFT_DATA_DIR/plugins/ 2>/dev/null
+cp -rf $OPENSHIFT_REPO_DIR/.openshift/plugins/* ${OPENSHIFT_DATA_DIR}plugins/ 2>/dev/null
 
 echo "Copying WordPress themes from .openshift/themes"
-cp -rf $OPENSHIFT_REPO_DIR/.openshift/themes/* $OPENSHIFT_DATA_DIR/themes/ 2>/dev/null
+cp -rf $OPENSHIFT_REPO_DIR/.openshift/themes/* ${OPENSHIFT_DATA_DIR}themes/ 2>/dev/null
 
 # Add multisite upload dir
+#
 if [ ! -d $OPENSHIFT_DATA_DIR/blogs.dir ]; then
     mkdir $OPENSHIFT_DATA_DIR/blogs.dir
 fi
