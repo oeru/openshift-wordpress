@@ -34,7 +34,7 @@ if [ ! -d ${OPENSHIFT_DATA_DIR}plugins ]; then
   mv ${dest_dir}/wp-content/plugins ${OPENSHIFT_DATA_DIR}plugins
 fi
 
-if [ ! -h ${OPENSHIFT_DATA_DIR}themes ]; then
+if [ ! -d ${OPENSHIFT_DATA_DIR}themes ]; then
   mv ${dest_dir}/wp-content/themes ${OPENSHIFT_DATA_DIR}themes
 fi
 
