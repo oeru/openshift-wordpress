@@ -11,7 +11,7 @@ match the application so you might have to update .openshift/action_hooks/build.
 Running on OpenShift
 ----------------------------
 
-Create an account at http://openshift.redhat.com/ and install the client tools (run 'rhc setup' first)
+Create an account at https://www.openshift.com and install the client tools (run 'rhc setup' first)
 
 Create a php-5.3 application (you can call your application whatever you want)
 
