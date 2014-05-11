@@ -39,8 +39,3 @@ rm -rf wordpress-${install_version}.tar.gz
 echo $install_version > ${OPENSHIFT_BUILD_DEPENDENCIES_DIR}.current_version
 
 popd >/dev/null
-
-# Copy the OpenShift wp-config.php file
-#
-cp -f ${OPENSHIFT_REPO_DIR}.openshift/config/wp-config.php ${install_dir}/wp-config.php
-

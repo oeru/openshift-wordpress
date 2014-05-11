@@ -58,6 +58,16 @@ ln -sf ${OPENSHIFT_DATA_DIR}plugins   ${OPENSHIFT_REPO_DIR}php/wp-content/
 ln -sf ${OPENSHIFT_DATA_DIR}themes    ${OPENSHIFT_REPO_DIR}php/wp-content/
 ln -sf ${OPENSHIFT_DATA_DIR}uploads   ${OPENSHIFT_REPO_DIR}php/wp-content/
 
+# Copy the OpenShift wp-config.php file
+
+cp -f ${OPENSHIFT_REPO_DIR}.openshift/config/wp-config.php ${dest_dir}/wp-config.php
+
+
+# Use repository htaccess if exists 
+if [  -f ${OPENSHIFT_REPO_DIR}.openshift/config/.htaccess ]; then
+  cp -f ${OPENSHIFT_REPO_DIR}.openshift/config/.htaccess ${dest_dir}/.htaccess
+fi
+
 set -e
 
 if [ -z "$OPENSHIFT_MYSQL_DB_HOST" ]
