@@ -26,6 +26,10 @@ if [ ! -d ${OPENSHIFT_DATA_DIR}uploads ]; then
     mkdir ${OPENSHIFT_DATA_DIR}uploads
 fi
 
+if [ ! -d ${OPENSHIFT_DATA_DIR}languages ]; then
+    mkdir ${OPENSHIFT_DATA_DIR}languages
+fi
+
 
 # If this is initial installation, copy the default themes and plugins
 # from official Wordpress installation
