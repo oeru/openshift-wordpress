@@ -20,7 +20,7 @@ current_version_dir=${OPENSHIFT_DATA_DIR}current
 mkdir -p $install_dir
 
 pushd ${install_dir} >/dev/null
-curl -s http://wordpress.org/wordpress-${install_version}.tar.gz > wordpress-${install_version}.tar.gz
+curl -Ls http://wordpress.org/wordpress-${install_version}.tar.gz > wordpress-${install_version}.tar.gz
 
 # Verify the sources
 #
