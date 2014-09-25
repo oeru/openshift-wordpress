@@ -1,7 +1,7 @@
-Wordpress on OpenShift
+WordPress on OpenShift
 ======================
 
-This git repository helps you get up and running quickly w/ a Wordpress installation
+This git repository helps you get up and running quickly w/ a WordPress installation
 on OpenShift.  The backend database is MySQL and the database name is the
 same as your application name (using getenv('OPENSHIFT_APP_NAME')).  You can name
 your application whatever you want.  However, the name of the database will always
