@@ -2,9 +2,9 @@
 
 # To update the version shipped in this quickstart, bump this variable:
 #
-install_version="3.9.2"
+install_version="4.0"
 
-# Download and install Wordpress
+# Download and install WordPress
 
 install_dir=${OPENSHIFT_BUILD_DEPENDENCIES_DIR}${install_version}
 
@@ -28,11 +28,11 @@ tarball_md5=$(md5sum wordpress-${install_version}.tar.gz | cut -d ' ' -f 1)
 wordpress_md5=$(curl -Ls http://wordpress.org/wordpress-${install_version}.tar.gz.md5)
 
 if [ "${tarball_md5}" != "${wordpress_md5}" ]; then
-  echo "ERROR: Wordpress ${install_version} MD5 checksum mismatch."
+  echo "ERROR: WordPress ${install_version} MD5 checksum mismatch."
   exit 1;
 fi
 
-# Install Wordpress
+# Install WordPress
 #
 tar --strip-components=1 -xzf wordpress-${install_version}.tar.gz
 rm -rf wordpress-${install_version}.tar.gz

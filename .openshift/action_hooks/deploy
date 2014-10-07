@@ -15,7 +15,7 @@ if [ ! -d "${dest_dir}" ]; then
   cp -rf ${install_dir}/* ${dest_dir}/
 fi
 
-# Replace the php/ directory with provided clean Wordpress installation
+# Replace the php/ directory with provided clean WordPress installation
 #
 if [ -d ${OPENSHIFT_REPO_DIR}php ]; then
   rm -rf ${OPENSHIFT_REPO_DIR}php
@@ -32,7 +32,7 @@ fi
 
 
 # If this is initial installation, copy the default themes and plugins
-# from official Wordpress installation
+# from official WordPress installation
 #
 if [ ! -d ${OPENSHIFT_DATA_DIR}plugins ]; then
   mv ${dest_dir}/wp-content/plugins ${OPENSHIFT_DATA_DIR}plugins
