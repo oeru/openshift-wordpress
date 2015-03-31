@@ -1,0 +1,3 @@
+[submodule ".openshift/themes/wordpress-oeru_theme"]
+	path = .openshift/themes/wordpress-oeru_theme
+	url = https://github.com/pgogy/wordpress-oeru_theme
