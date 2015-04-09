@@ -2,5 +2,5 @@
 	path = .openshift/plugins/uio-wordpress-plugin
 	url = https://github.com/fluid-project/uio-wordpress-plugin
 [submodule ".openshift/themes/oeru_theme"]
-	path = .openshift/themes/oeru_theme
+	path = .openshift/themes/oeru_course
 	url = https://github.com/pgogy/wordpress-oeru_theme
