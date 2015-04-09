@@ -120,6 +120,12 @@ define('DB_COLLATE', '');
 require_once(getenv('OPENSHIFT_REPO_DIR') . '.openshift/openshift.inc');
 
 /*
+ * use the OERu course theme by default
+ */
+
+define('WP_DEFAULT_THEME', 'oeru_course');
+
+/*
 |--------------------------------------------------------------------------
 | That's all, stop editing! Happy blogging.
 |--------------------------------------------------------------------------
