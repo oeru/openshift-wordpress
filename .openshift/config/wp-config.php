@@ -60,7 +60,7 @@ $table_prefix  = 'wp_';
 |
 */
 
-define('FORCE_SSL_ADMIN', true);
+define('FORCE_SSL_ADMIN', false);
 
 /*
 |--------------------------------------------------------------------------
