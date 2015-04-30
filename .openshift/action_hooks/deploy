@@ -50,6 +50,8 @@ cp -rf $OPENSHIFT_REPO_DIR/.openshift/plugins/* ${OPENSHIFT_DATA_DIR}plugins/ 2>
 
 echo "Copying WordPress themes from .openshift/themes"
 cp -rf $OPENSHIFT_REPO_DIR/.openshift/themes/* ${OPENSHIFT_DATA_DIR}themes/ 2>/dev/null
+echo "Hot fix oeru_theme menu css"
+cp -rf $OPENSHIFT_REPO_DIR/.openshift/css/oeru_theme/* ${OPENSHIFT_DATA_DIR}themes/oeru_theme/css
 
 echo "Copying WordPress languages from .openshift/languages"
 cp -rf $OPENSHIFT_REPO_DIR/.openshift/languages/* ${OPENSHIFT_DATA_DIR}languages/ 2>/dev/null
