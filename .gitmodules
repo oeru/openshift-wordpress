@@ -4,3 +4,9 @@
 [submodule ".openshift/themes/oeru_theme"]
 	path = .openshift/themes/oeru_course
 	url = https://github.com/oeru/oeru_course
+[submodule ".openshift/plugins/wequizzes"]
+	path = .openshift/plugins/wequizzes
+	url = https://github.com/oeru/wequizzes.git
+[submodule ".openshift/plugins/wemath"]
+	path = .openshift/plugins/wemath
+	url = https://github.com/oeru/wemath.git
