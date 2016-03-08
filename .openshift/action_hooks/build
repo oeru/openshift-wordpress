@@ -2,7 +2,7 @@
 
 # To force a specific version of WordPress, set this variable:
 #
-# install_version="4.2"
+# install_version="4.4"
 
 # Used in this script only
 #
@@ -19,7 +19,7 @@ current_version_dir=${OPENSHIFT_DATA_DIR}current
 # as long as the latest version is upgrade-compatible:
 #
 if [ -z "$install_version" ]; then
-  install_version=$(curl -s "https://api.wordpress.org/core/version-check/1.7/?version=4.2" | python -c 'import sys, json; latest = json.load(sys.stdin)["offers"][0]; print latest["version"] if latest["response"] == "upgrade" else "4.2"')
+  install_version=$(curl -s "https://api.wordpress.org/core/version-check/1.7/?version=4.4" | python -c 'import sys, json; latest = json.load(sys.stdin)["offers"][0]; print latest["version"] if latest["response"] == "upgrade" else "4.4"')
 fi
 
 # Download and install WordPress
