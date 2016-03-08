@@ -1,1 +1,9 @@
 .project
+# editor debris
+*~
+.#*
+._*
+.*.sw?
+# OS debris
+.DS_Store
+
